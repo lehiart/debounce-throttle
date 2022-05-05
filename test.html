@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="text-input" placeholder="typeeeee..." />
+
+    <p id="debounce"></p>
+    <p id="throttle">0</p>
+
+    <script>
+      const debounce = (cb, delay = 1000) => {
+        let timeoutHandler;
+
+        return (...args) => {
+          clearTimeout(timeoutHandler);
+
+          timeoutHandler = setTimeout(() => {
+            cb(...args);
+          }, delay);
+        };
+      };
+
+      const throttle = (cb, delay = 2000) => {
+        let timeoutHandler;
+
+        if (timeoutHandler) {
+          return;
+        }
+
+        return (...args) => {
+          timeoutHandler = setTimeout(() => {
+            timeoutHandler = null;
+            cb(...args);
+          }, delay);
+        };
+      };
+
+      document.getElementById('text-input').addEventListener(
+        'keydown',
+        debounce((e) => {
+          console.log(e.target.value);
+          document.getElementById('debounce').innerText = e.target.value;
+        })
+      );
+
+      document.addEventListener(
+        'mousemove',
+        throttle((e) => {
+          console.log(e);
+          document.getElementById('throttle').innerText =
+            Number(document.getElementById('throttle').innerText) + 1;
+        })
+      );
+    </script>
+  </body>
+</html>
